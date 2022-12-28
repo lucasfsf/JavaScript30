@@ -58,6 +58,31 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  window.addEventListener('keydown', function(e) {
+    const key = e.keyCode;
+    playAudio(key);
+    lightKeyDiv(key);
+  });
+
+  function playAudio(key) {
+    const audio = document.querySelector(`audio[data-key="${key}"]`);
+    if (!audio) return; // stop the function from running all together
+    audio.currentTime = 0; // rewinds audio to start in case we hit the key in sucession
+    audio.play();
+  }
+
+  function lightKeyDiv(key) {
+    const keyDiv = document.querySelector(`.key[data-key="${key}"]`);
+    keyDiv.classList.add('playing');
+    // remove transition animation from all keys
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  }
+
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return; // skip it if its not a transform
+    this.classList.remove('playing');
+  }
 
 </script>
 
